@@ -3,14 +3,16 @@ var canvas = document.createElement('canvas');
 var width = 500;
 var height = 500;
 var background = "#eee";
-var pointx = width/2;
-var points = [new Point(0,height/2), new Point(pointx, height/2)];
-var obstacles = [new Obstacle()];
+var pointx = width/3;
 var gap = height/7;
 var ctx = canvas.getContext('2d');
 var hspeed = 100;
 var vspeed = 0;
 var vacc = 5;
+var curr_score = 0;
+var lineWidth = 5;
+var points = [new Point(0,height/2), new Point(pointx, height/2)];
+var obstacles = [new Obstacle(), new Obstacle(width*3/2)];
 
 function setCanvas() {
 	canvas.width = width;
@@ -24,15 +26,16 @@ function Point(a, b){
 }
 
 function Obstacle(a, b, col) {
-	this.x = a || width;
-	this.y = b || Math.random()*(height-gap)+gap/2;
+    this.x = a || width;
+	this.y = b || Math.random()*(height-(gap))+gap/2;
 	this.c = col || "#000";
+    this.pass = false;
 	return this;
 }
 
 function drawLine(p1, p2, c) {
 	ctx.beginPath();
-	ctx.lineWidth = 5;
+	ctx.lineWidth = lineWidth;
 	ctx.moveTo(p1.x, p1.y);
 	ctx.lineTo(p2.x, p2.y);
 	ctx.strokeStyle = c;
@@ -76,11 +79,16 @@ function updatePoints(t) {
 		points[i].x -= hspeed*t;
 	}
 	var lastPoint = points[i-1];
+    vspeed = vspeed + vacc*t;
 	points.push(new Point(pointx, lastPoint.y + vspeed));
 }
 
-function updateSpeed(t) {
-	vspeed = vspeed + vacc*t;
+function updateScore() {
+    ctx.fillStyle = "rgb(50, 50, 50)";
+    ctx.font = "24px Helvetica";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "top";
+    ctx.fillText("Score: " + curr_score, 32, 32);
 }
 
 function detectCollision() {
@@ -90,8 +98,12 @@ function detectCollision() {
 		window.location = window.location;
 	}
 	for(var i=0; i<obstacles.length; i++) {
-		if(obstacles[i].x >= p.x && obstacles[i].x <= q.x) {
-			if((p.y < obstacles[i].y-gap/2 && q.y < obstacles[i].y-gap/2) || (p.y > obstacles[i].y+gap/2 && q.y > obstacles[i].y+gap/2)) {
+		if(obstacles[i].x > p.x && obstacles[i].x - lineWidth/2 <= q.x) {
+            if(!obstacles[i].pass) {
+                curr_score++;
+                obstacles[i].pass = true;
+            }
+			if(q.y - lineWidth/2 < obstacles[i].y - gap/2 || q.y + lineWidth/2 > obstacles[i].y + gap/2) {
 				window.location = window.location;
 			}
 		}
@@ -99,7 +111,6 @@ function detectCollision() {
 }
 
 function update(t) {
-	updateSpeed(t);
 	updatePoints(t);
 	updateObstacles(t);
 	detectCollision();
@@ -109,6 +120,7 @@ function render() {
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	drawObstacles();
 	drawPoints();
+    updateScore();
 }
 
 addEventListener("keydown", function(e) {
