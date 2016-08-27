@@ -1,29 +1,44 @@
 var canvas = document.createElement('canvas');
+canvas.setAttribute("id", "canvas");
 
-var width = 1000;
-var height = 650;
-var background = "#eee";
+var width = 1024;
+var height = 576;
 var pointx = width/3;
 var gap = height/12;
 var ctx = canvas.getContext('2d');
 var hspeed = 100;
 var hacc = 5;
 var vspeed = 0;
-var vacc = 10;
+var vacc = 8;
 var curr_score = 0;
 var lineWidth = width/200;
+var lineColor = "#009688";
+var obstacleColor = "#424242"
 var obstacles_n = 3;
 var points = [new Point(0,height/2), new Point(pointx, height/2)];
 var obstacles = [];
 for(var i=0; i<obstacles_n; i++) {
     obstacles.push(new Obstacle(width*(1+i/obstacles_n)));
 }
+var backgrounds = [ "#f44336", "#e91e63", "#9c27b0", "#673ab7",
+                    "#3f51b5", "#2196f3", "#03a9f4", "#00bcd4",
+                    "#4caf50", "#8bc34a", "#cddc39", "#ff5722",
+                    "#ffeb3b", "#ffc107", "#ff9800", "#607d8b",
+                    "#795548", "#9e9e9e"
+                  ];
+
+function random(arr) {
+    return arr[Math.round(Math.random()*(arr.length))];
+}
 
 function setCanvas() {
 	canvas.width = width;
 	canvas.height = height;
-	canvas.style.background = background;
 }
+
+setInterval(function() {
+    document.body.style.background = random(backgrounds);
+}, 5000);
 
 function Point(a, b){
 	this.x = a;
@@ -33,7 +48,7 @@ function Point(a, b){
 function Obstacle(a, b, col) {
     this.x = a || width;
 	this.y = b || Math.random()*(height-(gap))+gap/2;
-	this.c = col || "#000";
+	this.c = col || obstacleColor;
     this.pass = false;
 	return this;
 }
@@ -70,7 +85,7 @@ function updateObstacles(t) {
 
 function drawPoints(t) {
 	for(var i=1; i < points.length; i++) {
-		drawLine(points[i-1], points[i], "red");
+		drawLine(points[i-1], points[i], lineColor);
 	}
 }
 
@@ -89,11 +104,11 @@ function updatePoints(t) {
 }
 
 function drawScore() {
-    ctx.fillStyle = "rgba(50, 50, 50, 0.5)";
+    ctx.fillStyle = "rgba(50, 50, 50, 0.8)";
     ctx.font = "24px Helvetica";
     ctx.textAlign = "left";
     ctx.textBaseline = "top";
-    ctx.fillText("Score: " + curr_score, 32, 32);
+    ctx.fillText("Score: " + curr_score, width-150, 32);
 }
 
 function detectCollision() {
@@ -129,13 +144,24 @@ function render() {
     drawScore();
 }
 
-addEventListener("keydown", function(e) {
-	vacc = -Math.abs(vacc);
-});
+function bindEvents() {
+    this.up = function() {
+        vacc = -Math.abs(vacc);
+    }
 
-addEventListener("keyup", function(e) {
-	vacc = Math.abs(vacc);
-})
+    this.down = function() {
+        vacc = Math.abs(vacc);
+    }
+
+    addEventListener("keydown", this.up);
+    addEventListener("keyup", this.down);
+
+    canvas.addEventListener("mousedown", this.up);
+    canvas.addEventListener("mouseup", this.down);
+
+    canvas.addEventListener("touchstart", this.up);
+    canvas.addEventListener("touchend", this.down);
+}
 
 function main() {
 	var now = Date.now();
@@ -149,7 +175,7 @@ function main() {
 	requestAnimationFrame(main);
 };
 
-
+bindEvents();
 setCanvas();
 
 document.body.appendChild(canvas);
