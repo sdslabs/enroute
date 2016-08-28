@@ -1,8 +1,8 @@
-Game = function(canvas, single=true, host=true, onStop) {
+Game = function(canvas, single=true, host=true, id, onStop, onSend) {
     var ctx = canvas.getContext('2d');
     var width = 1024;
     var height = 576;
-    var vacc, hacc, vspeed, hspeed, isRunning;
+    var then, vacc, hacc, vspeed, hspeed, isRunning;
     var players = {};
     var scores = {};
     var gap = height/12;
@@ -10,7 +10,7 @@ Game = function(canvas, single=true, host=true, onStop) {
     var lineWidth = width/200;
     var lineColor = {
         primary: "#009688",
-        secondary: ""
+        secondary: "#111"
     };
     var scoreColor = {
         primary: "rgba(50, 50, 50, 0.8)",
@@ -73,6 +73,10 @@ Game = function(canvas, single=true, host=true, onStop) {
                 this.drawPlayer(players[player], color);
             }
         }
+    }
+
+    function send() {
+        onSend(id, obstacles, players['self'], scores['self']);
     }
 
     function updateObstacles(t) {
@@ -147,10 +151,12 @@ Game = function(canvas, single=true, host=true, onStop) {
     function bindEvents() {
         this.up = function() {
             vacc = -Math.abs(vacc);
+            vacc = -10;
         }
 
         this.down = function() {
             vacc = Math.abs(vacc);
+            vacc = 8;
         }
 
         addEventListener("keydown", this.up);
@@ -163,17 +169,16 @@ Game = function(canvas, single=true, host=true, onStop) {
         canvas.addEventListener("touchend", this.down);
     }
 
-    var then = Date.now();
     function main() {
         var now = Date.now();
         var delta = now - then;
 
         update(delta / 1000);
+        if(!single) send();
         render();
 
         if(!isRunning) {
             stop();
-            console.log('stopped');
             return;
         };
 
@@ -196,6 +201,7 @@ Game = function(canvas, single=true, host=true, onStop) {
             }
         }
         isRunning = true;
+        then = Date.now();
     }
 
     function run() {
@@ -212,7 +218,6 @@ Game = function(canvas, single=true, host=true, onStop) {
     function stop() {
         vacc = hacc = vspeed = hspeed = 0;
         if(single) max_score = Math.max(scores['self'], max_score);
-        console.log(max_score);
         onStop(run);
     }
 }

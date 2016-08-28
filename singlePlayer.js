@@ -7,5 +7,5 @@ stop = function(cb) {
 		cb();
 	})
 }
-var game = new Game(canvas, true, true, stop);
+var game = new Game(canvas, true, true, 0, stop);
 game.start();
