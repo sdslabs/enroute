@@ -2,9 +2,29 @@
 <html>
 <head>
 	<title>Amazing Wire</title>
+	<link rel="stylesheet" type="text/css" href="src/css/main.css">
 </head>
 <body>
-	<a href="single.html">Single Player</a> <br>
-	<a href="multiple.html">Multi Player</a>
+	<div id="index">
+		<div id="score-span">
+			Score: <span id="score"></span>
+		</div>
+		<div id="highscore-span">
+			High Score: <span id="highscore"></span>
+		</div>
+		<div id="play-button">
+			<button id="play">
+				Play
+			</button>
+		</div>
+	</div>
+	<div id="game">
+		<canvas id="canvas"></canvas>
+	</div>
 </body>
+
+<script type="text/javascript" src="src/js/cookie.js"></script>
+<script type="text/javascript" src="src/js/game.js"></script>
+<script type="text/javascript" src="src/js/main.js"></script>
+
 </html>
