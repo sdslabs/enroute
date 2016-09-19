@@ -1,0 +1,122 @@
+html {
+	height: 100%;
+	font-family: 'Bangers', cursive;
+}
+
+body {
+	height: 100%;
+	display: flex;
+}
+
+.center {
+	margin-right: auto;
+	margin-left: auto;
+}
+
+#container {
+	height: 500px;
+	width: 900px;
+	background-image: url("../img/background.png");
+	background-size: cover;
+	border-radius: 20px;
+	align-self: center;
+	text-align: center;
+	position: relative;
+}
+
+#index {
+	position: absolute;
+	width: 100%;
+}
+
+#index #title {
+	margin-top: 75px;
+	font-size: 100px;
+	width: 100%;
+}
+
+#index #name-input {
+	margin-top: 50px;
+	width: 100%;
+}
+
+input[type="text"]{
+    background-color: transparent;
+    border: 0px;
+    outline: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    width:5px;
+}
+
+#index #name-input #name {
+	height: 40px;
+	width: 100%;
+	font-size: 42px;
+	text-align: center;
+	font-family: 'Bangers', cursive;
+	color: #222;
+	border-radius: 10px;
+}
+
+#index #play-button {
+	margin-top: 25px;
+	width: 100%;
+}
+
+#index #play-button #play {
+    background: #000;
+    border: none;
+    font-size: 26px;
+    padding: 5px 30px;
+    border-radius: 50px;
+    color: #fff;
+    font-family: 'Bangers', cursive;
+    cursor: pointer;
+}
+
+#instructions {
+	padding: 10px 100px;
+	margin-top: 40px;
+	line-height: 20px;
+}
+
+#instructions span {
+	font-size: 20px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 700;
+}
+
+#instructions p {
+	color: #fff;
+	font-size: 18px;
+	margin-top: 5px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 300;
+}
+
+#game {
+	z-index: -1;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+#game #canvas {
+	width: 100%;
+	height: 100%;
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: rgba(255,255,255,0.5);
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: rgba(255,255,255,0.5);
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: rgba(255,255,255,0.5);
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: rgba(255,255,255,0.5);
+}

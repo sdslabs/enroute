@@ -2,14 +2,16 @@ document.getElementById('play').addEventListener('click', startGame);
 
 function startGame() {
 	var canvas = document.getElementById('canvas');
-	document.getElementById('game').style.visibility = "visible";
+	document.getElementById('game').style.zIndex = 1;
+	document.getElementById('index').style.opacity = 0;
+	document.getElementById('game').style.opacity = 1;
 	stop = function(score) {
-		document.getElementById('game').style.visibility = "hidden";
-		document.getElementById('index').style.visibility = "visible";
-		updateScores(score);
+		document.getElementById('index').style.opacity = 1;
+		document.getElementById('game').style.opacity = 0;
+		document.getElementById('game').style.zIndex = -1;
 		document.getElementById('name').focus();
+		updateScores(score);
 	}
-	document.getElementById('index').style.visibility = "hidden";
 	var game = new Game(canvas, true, true, 0, stop);
 	game.start();
 }

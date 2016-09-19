@@ -2,27 +2,31 @@
 <html>
 <head>
 	<title>Amazing Wire</title>
+	<link rel="stylesheet" type="text/css" href="src/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="src/css/main.css">
+	<link href="https://fonts.googleapis.com/css?family=Bangers|Roboto:300,700" rel="stylesheet">
 </head>
 <body>
-	<div id="index">
-		<div id="score-span">
-			Score: <span id="score"></span>
+	<div id="container" class="center">
+		<div id="index">
+			<div id="title">Enroute</div>
+			<div id="name-input" class="center">
+				<input type="text" id="name" autocomplete="off" autofocus onfocus="this.value=this.value;" placeholder="Name">
+			</div>
+			<div id="play-button">
+				<button id="play">
+					Play
+				</button>
+			</div>
+			<div id="instructions">
+				<span>Instructions</span>
+				<br>
+				<p>Press any key or click to move up.</p>
+			</div>
 		</div>
-		<div id="highscore-span">
-			High Score: <span id="highscore"></span>
+		<div id="game">
+			<canvas id="canvas"></canvas>
 		</div>
-		<div id="name-input">
-			This is the tale of <input type="text" id="name" autocomplete="off" autofocus>
-		</div>
-		<div id="play-button">
-			<button id="play">
-				Play
-			</button>
-		</div>
-	</div>
-	<div id="game">
-		<canvas id="canvas"></canvas>
 	</div>
 </body>
 

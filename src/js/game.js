@@ -2,17 +2,16 @@ Game = function(canvas, single=true, host=true, id, onStop, onSend) {
 
     // Canvas related variables
     var ctx = canvas.getContext('2d');
-    var width = 1024;
-    var height = 576;
-    var lineWidth = width/200;
+    var width = 900;
+    var height = 500;
     var lineColor = {
-        primary: "#009688",
+        primary: "#fff",
         secondary: "#111"
     };
 
     // Game related variables
     var hspeed = 150;
-    var hacc = 5;
+    var hacc = 2;
     var vspeed = 0;
     var vacc_up = 10;
     var vacc_down = 8;
@@ -22,16 +21,20 @@ Game = function(canvas, single=true, host=true, id, onStop, onSend) {
 
     // Players related variables
     var start_point = width/3;
+    var player_lineWidth = 2;
+    var head = new Image();
     var players = {
         'self': [new Point(0, height/2), new Point(start_point, height/2)]
     };
+    head.src = 'src/img/head.png';
 
     // Obstacles related variables
     var obstacles = [];
-    var gap = height/8;
+    var gap = height/6;
     var minHeight = height/12;
-    var obstacleColor = "#424242";
+    var obstacleColor = "#000";
     var no_of_obstacles = 2;
+    var obstacle_lineWidth = 10;
     if(host) {
         for(var i=0; i<no_of_obstacles; i++) {
             obstacles.push(new Obstacle(width*(1+i/no_of_obstacles)));
@@ -51,6 +54,9 @@ Game = function(canvas, single=true, host=true, id, onStop, onSend) {
     function setCanvas() {
         canvas.width = width;
         canvas.height = height;
+        drawObstacles();
+        drawPlayers();
+        drawScores();
     }
 
     function Point(a, b){
@@ -65,14 +71,19 @@ Game = function(canvas, single=true, host=true, id, onStop, onSend) {
         this.pass = false;
     }
 
-    function drawLine(p1, p2, c) {
+    function drawLine(p1, p2, c, w) {
         ctx.lineCap = "round";
-        ctx.lineWidth = lineWidth;
+        ctx.lineWidth = w;
         ctx.strokeStyle = c;
         ctx.beginPath();
         ctx.moveTo(p1.x, p1.y);
         ctx.lineTo(p2.x, p2.y);
         ctx.stroke();
+    }
+
+    function drawHead(player) {
+        var n = player.length-1;
+        ctx.drawImage(head, player[n].x, player[n].y);
     }
 
     function drawScore(score, right, top, color) {
@@ -94,8 +105,8 @@ Game = function(canvas, single=true, host=true, id, onStop, onSend) {
 
     function drawObstacles() {
         this.drawObstacle = function(x, y, c) {
-            drawLine(new Point(x, 0), new Point(x, y), c);
-            drawLine(new Point(x, y+gap), new Point(x, height), c);
+            drawLine(new Point(x, 0), new Point(x, y), c, obstacle_lineWidth);
+            drawLine(new Point(x, y+gap), new Point(x, height), c, obstacle_lineWidth);
         }
 
         for(var i=0; i < obstacles.length; i++) {
@@ -103,11 +114,12 @@ Game = function(canvas, single=true, host=true, id, onStop, onSend) {
         }
     }
 
-    function drawPlayers(t) {
+    function drawPlayers() {
         this.drawPlayer = function(pl, col) {
-            for(var i=1; i < pl.length; i++) {
-                drawLine(pl[i-1], pl[i], col);
+            for(var i=1; i < pl.length; i+=2) {
+                drawLine(pl[i-1], pl[i], col, player_lineWidth);
             }
+            // drawHead(pl);
         }
 
         for(var player in players) {
@@ -149,12 +161,12 @@ Game = function(canvas, single=true, host=true, id, onStop, onSend) {
     function detectCollision(player) {
         p = player[player.length-2];
         q = player[player.length-1];
-        if(q.y - lineWidth/2 <= 0 || q.y + lineWidth/2 >= height) {
+        if(q.y - player_lineWidth/2 <= 0 || q.y + player_lineWidth/2 >= height) {
             isRunning = false;
         }
         for(var i=0; i<obstacles.length; i++) {
-            if(obstacles[i].x > p.x && obstacles[i].x - lineWidth/2 <= q.x) {
-                if(q.y - lineWidth/2 < obstacles[i].y || q.y + lineWidth/2 > obstacles[i].y + gap) {
+            if(obstacles[i].x > p.x && obstacles[i].x - obstacle_lineWidth/2 <= q.x) {
+                if(q.y - player_lineWidth/2 < obstacles[i].y || q.y + player_lineWidth/2 > obstacles[i].y + gap) {
                     isRunning = false;
                     return;
                 }
@@ -215,11 +227,6 @@ Game = function(canvas, single=true, host=true, id, onStop, onSend) {
         then = now;
 
         requestAnimationFrame(main);
-    }
-
-    function run() {
-        init();
-        main();
     }
 
     this.start = function() {
