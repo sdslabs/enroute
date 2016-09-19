@@ -7,6 +7,7 @@ function startGame() {
 		document.getElementById('game').style.visibility = "hidden";
 		document.getElementById('index').style.visibility = "visible";
 		updateScores(score);
+		document.getElementById('name').focus();
 	}
 	document.getElementById('index').style.visibility = "hidden";
 	var game = new Game(canvas, true, true, 0, stop);
@@ -23,4 +24,19 @@ function updateScores(score) {
 	document.getElementById('highscore').innerHTML = highscore;
 }
 
+function name() {
+	var name = Cookies.get('name');
+	var nameEl = document.getElementById('name');
+	if(name) {
+		nameEl.value = name;
+	}
+	nameEl.addEventListener('keyup', function(e) {
+		Cookies.set('name', nameEl.value.trim());
+		if(e.keyCode == 13) {
+			startGame();
+		}
+	})
+}
+
+name();
 updateScores(0);
