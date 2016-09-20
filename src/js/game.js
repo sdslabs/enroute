@@ -11,7 +11,7 @@ Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
 
     // Game related variables
     var hspeed = 150;
-    var hacc = 5;
+    var hacc = 1;
     var vspeed = 0;
     var vacc_up = 10;
     var vacc_down = 10;
@@ -28,7 +28,7 @@ Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
         'self': []
     };
     head.src = 'src/img/head.png';
-    for(var i=0; i<start_point; i++) {
+    for(var i=0; i<start_point; i+=3) {
         players['self'].push(new Point(i, height/2));
     }
 
@@ -180,6 +180,23 @@ Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
             h: height - obstacles[i].y - gap
         }
 
+        var rect3, rect4;
+
+        if(i!=0) {
+            rect3 = {
+                x: obstacles[i-1].x - obstacle_lineWidth/2,
+                y: 0,
+                w: obstacle_lineWidth,
+                h: obstacles[i-1].y,
+            }
+            rect4 = {
+                x: obstacles[i-1].x - obstacle_lineWidth/2,
+                y: obstacles[i-1].y + gap,
+                w: obstacle_lineWidth,
+                h: height - obstacles[i-1].y - gap
+            }
+        }
+
         if(circle.y + circle.r >= height || circle.y - circle.r <= 0) {
             isRunning = false;
             return;
@@ -197,10 +214,19 @@ Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
             return;
         }
 
+        if(i!=0) {
+            if((((circle.x - (rect3.x+rect3.w))**2 + (rect3.y+rect3.h - circle.y)**2) <= (circle.r)**2) ||
+                (((circle.x - (rect4.x+rect4.w))**2 + (rect4.y - circle.y)**2) <= (circle.r)**2)) {
+                isRunning = false;
+                return;
+            }
+        }
+
         if(player[j-2].x <= obstacles[i].x && player[j-1].x > obstacles[i].x) {
             if(!obstacles[i].pass) {
                 obstacles[i].pass = true;
                 scores['self']++;
+                hspeed += hacc;
             }
         }
     }
