@@ -21,13 +21,16 @@ Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
 
     // Players related variables
     var start_point = width/3;
-    var player_lineWidth = 2.5;
+    var player_lineWidth = 3;
     var head = new Image();
     var head_radius = 15;
     var players = {
-        'self': [new Point(0, height/2), new Point(start_point, height/2)]
+        'self': []
     };
     head.src = 'src/img/head.png';
+    for(var i=0; i<start_point; i++) {
+        players['self'].push(new Point(i, height/2));
+    }
 
     // Obstacles related variables
     var obstacles = [];
@@ -43,16 +46,12 @@ Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
     }
 
     // Score related variables
-    var scoreFont = "24px Helvetica";
-    var scoreColor = {
-        primary: "rgba(50, 50, 50, 0.8)",
-        secondary: ""
-    }
     var scores = {
         'self': 0
     };
 
-    setCanvas();
+    // Initial draw
+    head.onload = setCanvas;
 
     function setCanvas() {
         canvas.width = width;
@@ -88,16 +87,12 @@ Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
         ctx.stroke();
     }
 
-    var rotation = 0;
     function drawHead(player) {
         var n = player.length-1;
-        // ctx.drawImage(head, player[n].x - head_radius, player[n].y - head_radius, 2*head_radius, 2*head_radius);
         ctx.save();
-        // ctx.clearRect(0,0,canvas.width, canvas.height);
-        ctx.translate( player[n].x - head_radius, player[n].y - head_radius);
-        rotation += 1;
-        ctx.rotate(Math.atan((player[n].y - player[n-1].y)/(player[n].x - player[n-1].x)));
-        ctx.translate( -player[n].x + head_radius, -player[n].y + head_radius);
+        ctx.translate( player[n].x, player[n].y);
+        ctx.rotate(Math.atan((player[n].y - player[n-10].y)/(player[n].x - player[n-10].x)));
+        ctx.translate( -player[n].x, -player[n].y);
         ctx.drawImage(head, player[n].x - head_radius, player[n].y - head_radius, 2*head_radius, 2*head_radius);
         ctx.restore();
     }
@@ -123,7 +118,7 @@ Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
 
     function drawPlayers() {
         this.drawPlayer = function(pl, col) {
-            for(var i=1; i < pl.length; i+=2) {
+            for(var i=1; i < pl.length; i+=3) {
                 drawLine(pl[i-1], pl[i], col, player_lineWidth);
             }
             drawHead(pl);
@@ -162,22 +157,50 @@ Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
     }
 
     function detectCollision(player) {
-        p = player[player.length-2];
-        q = player[player.length-1];
-        if(q.y - player_lineWidth/2 <= 0 || q.y + player_lineWidth/2 >= height) {
-            isRunning = false;
+        var j = player.length;
+        var i;
+        for(i=0; i<obstacles.length; i++) {
+            if (!obstacles[i].pass) break;
         }
-        for(var i=0; i<obstacles.length; i++) {
-            if(obstacles[i].x > p.x && obstacles[i].x - obstacle_lineWidth/2 <= q.x) {
-                if(q.y - player_lineWidth/2 < obstacles[i].y || q.y + player_lineWidth/2 > obstacles[i].y + gap) {
-                    isRunning = false;
-                    return;
-                }
-                if(!obstacles[i].pass) {
-                    scores['self']++;
-                    obstacles[i].pass = true;
-                }
-                if(!scores['self']%5) hspeed += hacc;
+        var circle = {
+            x: player[j-1].x,
+            y: player[j-1].y,
+            r: head_radius
+        }
+        var rect1 = {
+            x: obstacles[i].x - obstacle_lineWidth/2,
+            y: 0,
+            w: obstacle_lineWidth,
+            h: obstacles[i].y,
+        }
+        var rect2 = {
+            x: obstacles[i].x - obstacle_lineWidth/2,
+            y: obstacles[i].y + gap,
+            w: obstacle_lineWidth,
+            h: height - obstacles[i].y - gap
+        }
+
+        if(circle.y + circle.r >= height || circle.y - circle.r <= 0) {
+            isRunning = false;
+            return;
+        }
+
+        if((rect1.x - circle.x <= circle.r) &&
+            ((circle.y < rect1.y + rect1.h) || (circle.y > rect2.y))) {
+            isRunning = false;
+            return;
+        }
+
+        if((((rect1.x - circle.x)**2 + (rect1.y+rect1.h - circle.y)**2) <= (circle.r)**2) ||
+            (((rect2.x - circle.x)**2 + (rect2.y - circle.y)**2) <= (circle.r)**2)) {
+            isRunning = false;
+            return;
+        }
+
+        if(player[j-2].x <= obstacles[i].x && player[j-1].x > obstacles[i].x) {
+            if(!obstacles[i].pass) {
+                obstacles[i].pass = true;
+                scores['self']++;
             }
         }
     }
