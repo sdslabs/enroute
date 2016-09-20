@@ -17,7 +17,7 @@ function startGame() {
 	}
 	var game = new Game(canvas, true, true, 0, stop, updateScores);
 	r.start();
-	setTimeout(game.start, 300);
+	setTimeout(game.start, 700);
 }
 
 function updateScores(score) {

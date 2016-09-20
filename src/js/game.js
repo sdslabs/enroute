@@ -36,8 +36,8 @@ Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
     var obstacles = [];
     var gap = height/6;
     var minHeight = height/12;
-    var obstacleColor = "#000";
-    var no_of_obstacles = 2;
+    var obstacleColor = "#111";
+    var no_of_obstacles = 3;
     var obstacle_lineWidth = 10;
     if(host) {
         for(var i=0; i<no_of_obstacles; i++) {
