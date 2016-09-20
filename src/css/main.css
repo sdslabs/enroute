@@ -145,6 +145,20 @@ input[type="text"]{
 	z-index: -1;
 }
 
+footer {
+	background-color: #eaeaea;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	height: 42px;
+	line-height: 42px;
+	text-align: center;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 400;
+	font-size: 20px;
+}
+
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
   color: rgba(255,255,255,0.7);
 }
@@ -152,8 +166,8 @@ input[type="text"]{
   color: rgba(255,255,255,0.7);
 }
 :-ms-input-placeholder { /* IE 10+ */
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.7);
 }
 :-moz-placeholder { /* Firefox 18- */
-  color: rgba(255,255,255,0.5);
+  color: rgba(255,255,255,0.7);
 }

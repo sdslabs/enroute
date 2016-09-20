@@ -5,6 +5,7 @@ function startGame() {
 	document.getElementById('game').style.zIndex = 1;
 	document.getElementById('index').style.opacity = 0;
 	document.getElementById('game').style.opacity = 1;
+	document.getElementById('name-float').innerHTML = Cookies.get('name');
 	if(Cookies.get('name') != "") document.getElementById('name-float').style.zIndex = 1;
 	stop = function() {
 		document.getElementById('index').style.opacity = 1;
@@ -39,7 +40,6 @@ function name() {
 		Cookies.set('name', nameEl.value.trim());
 		if(e.keyCode == 13) {
 			document.getElementById('name').blur();
-			document.getElementById('name-float').innerHTML = Cookies.get('name');
 			startGame();
 		}
 	})
