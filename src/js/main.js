@@ -5,15 +5,16 @@ function startGame() {
 	document.getElementById('game').style.zIndex = 1;
 	document.getElementById('index').style.opacity = 0;
 	document.getElementById('game').style.opacity = 1;
-	stop = function(score) {
+	stop = function() {
 		document.getElementById('index').style.opacity = 1;
 		document.getElementById('game').style.opacity = 0;
 		document.getElementById('game').style.zIndex = -1;
 		document.getElementById('name').focus();
-		updateScores(score);
+		r.stop()
 	}
-	var game = new Game(canvas, true, true, 0, stop);
-	game.start();
+	var game = new Game(canvas, true, true, 0, stop, updateScores);
+	r.start();
+	setTimeout(game.start, 1000);
 }
 
 function updateScores(score) {
@@ -35,10 +36,28 @@ function name() {
 	nameEl.addEventListener('keyup', function(e) {
 		Cookies.set('name', nameEl.value.trim());
 		if(e.keyCode == 13) {
+			document.getElementById('name').blur();
 			startGame();
 		}
 	})
 }
 
+function rotateBackground() {
+	var x = 0;
+	var i;
+
+	this.start = function() {
+		i = setInterval(function() {
+			x += 0.1;
+			document.getElementById('container').style.backgroundPosition = x + "px 0";
+		}, 5);
+	}
+
+	this.stop = function() {
+		clearInterval(i);
+	}
+}
+
 name();
 updateScores(0);
+var r = new rotateBackground();

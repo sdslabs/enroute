@@ -13,11 +13,18 @@ body {
 	margin-left: auto;
 }
 
+.black-white-box {
+	background-color: #000;
+	color: #fff;
+    border-radius: 50px;
+}
+
 #container {
 	height: 500px;
 	width: 900px;
 	background-image: url("../img/background.png");
 	background-size: cover;
+	background-repeat: repeat-x;
 	border-radius: 20px;
 	align-self: center;
 	text-align: center;
@@ -66,12 +73,9 @@ input[type="text"]{
 }
 
 #index #play-button #play {
-    background: #000;
     border: none;
     font-size: 26px;
     padding: 5px 30px;
-    border-radius: 50px;
-    color: #fff;
     font-family: 'Bangers', cursive;
     cursor: pointer;
 }
@@ -106,6 +110,23 @@ input[type="text"]{
 #game #canvas {
 	width: 100%;
 	height: 100%;
+}
+
+#scores {
+	position: absolute;
+	top: 30px;
+	right: 30px;
+	z-index: 2;
+}
+
+#scores div {
+	padding: 5px 10px;
+	margin-bottom: 5px;
+	text-align: right;
+	position: relative;
+	float: right;
+	clear: both;
+	font-size: 20px;
 }
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */

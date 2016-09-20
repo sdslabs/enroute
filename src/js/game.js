@@ -1,4 +1,4 @@
-Game = function(canvas, single=true, host=true, id, onStop, onSend) {
+Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
 
     // Canvas related variables
     var ctx = canvas.getContext('2d');
@@ -11,18 +11,19 @@ Game = function(canvas, single=true, host=true, id, onStop, onSend) {
 
     // Game related variables
     var hspeed = 150;
-    var hacc = 2;
+    var hacc = 5;
     var vspeed = 0;
     var vacc_up = 10;
-    var vacc_down = 8;
+    var vacc_down = 10;
     var vacc = vacc_down;
     var isRunning = true;
     var then;
 
     // Players related variables
     var start_point = width/3;
-    var player_lineWidth = 2;
+    var player_lineWidth = 2.5;
     var head = new Image();
+    var head_radius = 15;
     var players = {
         'self': [new Point(0, height/2), new Point(start_point, height/2)]
     };
@@ -51,12 +52,18 @@ Game = function(canvas, single=true, host=true, id, onStop, onSend) {
         'self': 0
     };
 
+    setCanvas();
+
     function setCanvas() {
         canvas.width = width;
         canvas.height = height;
         drawObstacles();
         drawPlayers();
         drawScores();
+    }
+
+    function clearCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
     function Point(a, b){
@@ -81,24 +88,24 @@ Game = function(canvas, single=true, host=true, id, onStop, onSend) {
         ctx.stroke();
     }
 
+    var rotation = 0;
     function drawHead(player) {
         var n = player.length-1;
-        ctx.drawImage(head, player[n].x, player[n].y);
-    }
-
-    function drawScore(score, right, top, color) {
-        ctx.fillStyle = color;
-        ctx.font = scoreFont;
-        ctx.textAlign = "left";
-        ctx.textBaseline = "top";
-        ctx.fillText("Score: " + score, right, top);
+        // ctx.drawImage(head, player[n].x - head_radius, player[n].y - head_radius, 2*head_radius, 2*head_radius);
+        ctx.save();
+        // ctx.clearRect(0,0,canvas.width, canvas.height);
+        ctx.translate( player[n].x - head_radius, player[n].y - head_radius);
+        rotation += 1;
+        ctx.rotate(Math.atan((player[n].y - player[n-1].y)/(player[n].x - player[n-1].x)));
+        ctx.translate( -player[n].x + head_radius, -player[n].y + head_radius);
+        ctx.drawImage(head, player[n].x - head_radius, player[n].y - head_radius, 2*head_radius, 2*head_radius);
+        ctx.restore();
     }
 
     function drawScores() {
         for(var player in players) {
             if (players.hasOwnProperty(player)) {
-                color = (player == 'self') ? scoreColor.primary : scoreColor.secondary;
-                drawScore(scores[player], width-150, 32, color);
+                updateScoresCb(scores[player]);
             }
         }
     }
@@ -119,7 +126,7 @@ Game = function(canvas, single=true, host=true, id, onStop, onSend) {
             for(var i=1; i < pl.length; i+=2) {
                 drawLine(pl[i-1], pl[i], col, player_lineWidth);
             }
-            // drawHead(pl);
+            drawHead(pl);
         }
 
         for(var player in players) {
@@ -128,10 +135,6 @@ Game = function(canvas, single=true, host=true, id, onStop, onSend) {
                 this.drawPlayer(players[player], color);
             }
         }
-    }
-
-    function send() {
-        onSend(id, obstacles, players['self'], scores['self']);
     }
 
     function updateObstacles(t) {
@@ -174,7 +177,7 @@ Game = function(canvas, single=true, host=true, id, onStop, onSend) {
                     scores['self']++;
                     obstacles[i].pass = true;
                 }
-                if(scores['self']%5) hspeed += hacc;
+                if(!scores['self']%5) hspeed += hacc;
             }
         }
     }
@@ -186,7 +189,7 @@ Game = function(canvas, single=true, host=true, id, onStop, onSend) {
     }
 
     function render() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        clearCanvas();
         drawObstacles();
         drawPlayers();
         drawScores();
@@ -237,6 +240,7 @@ Game = function(canvas, single=true, host=true, id, onStop, onSend) {
     }
 
     function stop() {
-        if (single) onStop(scores['self']);
+        clearCanvas();
+        if (single) onStopCb();
     }
 }

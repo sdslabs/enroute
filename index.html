@@ -5,6 +5,7 @@
 	<link rel="stylesheet" type="text/css" href="src/css/reset.css">
 	<link rel="stylesheet" type="text/css" href="src/css/main.css">
 	<link href="https://fonts.googleapis.com/css?family=Bangers|Roboto:300,700" rel="stylesheet">
+	<link rel='shortcut icon' href='src/img/head.png' type='image/x-icon'/ >
 </head>
 <body>
 	<div id="container" class="center">
@@ -14,7 +15,7 @@
 				<input type="text" id="name" autocomplete="off" autofocus onfocus="this.value=this.value;" placeholder="Name">
 			</div>
 			<div id="play-button">
-				<button id="play">
+				<button id="play" class="black-white-box">
 					Play
 				</button>
 			</div>
@@ -26,6 +27,14 @@
 		</div>
 		<div id="game">
 			<canvas id="canvas"></canvas>
+		</div>
+		<div id="scores">
+			<div class="black-white-box">
+				Score: <span id="score"></span>
+			</div>
+			<div class="black-white-box">
+				High Score: <span id="highscore"></span>
+			</div>
 		</div>
 	</div>
 </body>
