@@ -81,9 +81,13 @@ input[type="text"]{
 }
 
 #instructions {
-	padding: 10px 100px;
+	padding: 10px 0px;
+	margin-right: 270px;
+	margin-left: 270px;
 	margin-top: 40px;
 	line-height: 20px;
+	background-color: rgba(77,77,77,0.25);
+	border-radius: 20px;
 }
 
 #instructions span {
@@ -97,7 +101,7 @@ input[type="text"]{
 	font-size: 18px;
 	margin-top: 5px;
 	font-family: 'Roboto', sans-serif;
-	font-weight: 300;
+	font-weight: 400;
 }
 
 #game {
@@ -127,6 +131,18 @@ input[type="text"]{
 	float: right;
 	clear: both;
 	font-size: 20px;
+}
+
+#name-float {
+	position: absolute;
+	top: 30px;
+	left: 30px;
+	z-index: 2;
+	float: left;
+	font-size: 20px;
+	padding: 5px 10px;
+	margin-bottom: 5px;
+	z-index: -1;
 }
 
 ::-webkit-input-placeholder { /* Chrome/Opera/Safari */
