@@ -208,15 +208,15 @@ Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
             return;
         }
 
-        if((((rect1.x - circle.x)**2 + (rect1.y+rect1.h - circle.y)**2) <= (circle.r)**2) ||
-            (((rect2.x - circle.x)**2 + (rect2.y - circle.y)**2) <= (circle.r)**2)) {
+        if(((Math.pow(rect1.x - circle.x,2) + Math.pow(rect1.y+rect1.h - circle.y,2)) <= Math.pow(circle.r,2)) ||
+            ((Math.pow(rect2.x - circle.x,2) + Math.pow(rect2.y - circle.y,2)) <= Math.pow(circle.r,2))) {
             isRunning = false;
             return;
         }
 
         if(i!=0) {
-            if((((circle.x - (rect3.x+rect3.w))**2 + (rect3.y+rect3.h - circle.y)**2) <= (circle.r)**2) ||
-                (((circle.x - (rect4.x+rect4.w))**2 + (rect4.y - circle.y)**2) <= (circle.r)**2)) {
+            if(((Math.pow(circle.x-(rect3.x+rect3.w),2) + Math.pow(rect3.y+rect3.h - circle.y,2)) <= Math.pow(circle.r,2)) ||
+                ((Math.pow(circle.x-(rect4.x+rect4.w),2) + Math.pow(rect4.y - circle.y,2)) <= Math.pow(circle.r,2))) {
                 isRunning = false;
                 return;
             }
