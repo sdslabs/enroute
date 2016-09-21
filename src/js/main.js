@@ -2,6 +2,8 @@ document.getElementById('play').addEventListener('click', startGame);
 
 function startGame() {
 	var canvas = document.getElementById('canvas');
+	document.getElementById('name').blur();
+	document.getElementById('play').blur();
 	document.getElementById('game').style.zIndex = 1;
 	document.getElementById('index').style.opacity = 0;
 	document.getElementById('game').style.opacity = 1;
@@ -13,7 +15,7 @@ function startGame() {
 		document.getElementById('game').style.zIndex = -1;
 		document.getElementById('name-float').style.zIndex = -1;
 		document.getElementById('name').focus();
-		r.stop()
+		r.stop();
 	}
 	var game = new Game(canvas, true, true, 0, stop, updateScores);
 	r.start();
@@ -39,7 +41,6 @@ function name() {
 	nameEl.addEventListener('keyup', function(e) {
 		Cookies.set('name', nameEl.value.trim());
 		if(e.keyCode == 13) {
-			document.getElementById('name').blur();
 			startGame();
 		}
 	})
