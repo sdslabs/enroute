@@ -23,7 +23,7 @@ Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
     var start_point = width/3;
     var player_lineWidth = 3;
     var head = new Image();
-    var head_radius = 15;
+    var head_radius = 16;
     var players = {
         'self': []
     };
@@ -37,7 +37,7 @@ Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
     var gap = height/6;
     var minHeight = height/12;
     var obstacleColor = "#111";
-    var no_of_obstacles = 3;
+    var no_of_obstacles = 2.5;
     var obstacle_lineWidth = 10;
     if(host) {
         for(var i=0; i<no_of_obstacles; i++) {
@@ -137,7 +137,7 @@ Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
             obstacles[i].x -= hspeed*t;
             if(obstacles[i].x < 0) {
                 obstacles.shift();
-                obstacles.push(new Obstacle());
+                obstacles.push(new Obstacle(obstacles[obstacles.length-1].x + width/no_of_obstacles));
             }
         }
     }

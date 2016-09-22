@@ -148,8 +148,38 @@ input[type="text"]{
 	transition: all 0.7s;
 }
 
-footer {
+#mute {
+	position: absolute;
+	bottom: 30px;
+	left: 30px;	
+	z-index: 2;
 	background-color: #eaeaea;
+	border-radius: 50%;
+	padding: 5px;
+}
+
+#mute img {
+	height: 30px;
+	width: 30px;
+}
+
+.unmuted img:nth-child(1) {
+	display: block;
+}
+
+.unmuted img:nth-child(2){
+	display: none;
+}
+
+.muted img:nth-child(1) {
+	display: none;
+}
+
+.muted img:nth-child(2) {
+	display: block;
+}
+
+footer {
 	position: absolute;
 	bottom: 0;
 	left: 0;

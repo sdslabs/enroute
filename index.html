@@ -38,11 +38,24 @@
 			</div>
 		</div>
 		<div id="name-float" class="black-white-box"></div>
+		<div id="mute" class="unmuted">
+			<img src="src/img/unmute.png">
+			<img src="src/img/mute.png">
+		</div>
 	</div>
+	<audio id="music" src="src/music/bg-music.mp3" loop="true">
+		<!-- <embed src="src/music/bg-music.mp3" width="180" height="90" loop="false" autostart="false" hidden="true"/> -->
+	</audio>
 </body>
 
 <footer>Made with &hearts; by <a href="https://sdslabs.co" target="_blank">SDSLabs</a></footer>
 
+
+<script type="text/javascript">
+	if(window.screen.availWidth > 1366) {
+		document.body.style.zoom = window.screen.availWidth/1366;
+	}
+</script>
 <script type="text/javascript" src="src/js/cookie.js"></script>
 <script type="text/javascript" src="src/js/game.js"></script>
 <script type="text/javascript" src="src/js/main.js"></script>

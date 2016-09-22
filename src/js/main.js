@@ -4,12 +4,14 @@ function startGame() {
 	var canvas = document.getElementById('canvas');
 	document.getElementById('name').blur();
 	document.getElementById('play').blur();
+	document.getElementById("music").play();
 	document.getElementById('game').style.zIndex = 1;
 	document.getElementById('index').style.opacity = 0;
 	document.getElementById('game').style.opacity = 1;
 	document.getElementById('name-float').innerHTML = Cookies.get('name');
 	if(Cookies.get('name') != "") document.getElementById('name-float').style.zIndex = 1;
 	stop = function() {
+		document.getElementById("music").load();
 		document.getElementById('index').style.opacity = 1;
 		document.getElementById('game').style.opacity = 0;
 		document.getElementById('game').style.zIndex = -1;
@@ -61,6 +63,18 @@ function rotateBackground() {
 		clearInterval(i);
 	}
 }
+
+var muteEl = document.getElementById("mute");
+muteEl.addEventListener('click', function() {
+	if(muteEl.className == "unmuted") {
+		muteEl.className = "muted";
+		document.getElementById("music").volume = 0;
+	}
+	else {
+		muteEl.className = "unmuted";
+		document.getElementById("music").volume = 1;
+	}
+});
 
 name();
 updateScores(0);
