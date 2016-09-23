@@ -9,6 +9,7 @@ function startGame() {
 	document.getElementById('index').style.opacity = 0;
 	document.getElementById('game').style.opacity = 1;
 	document.getElementById('name-float').innerHTML = Cookies.get('name');
+  mixpanel.track("Game Play");
 	if(Cookies.get('name') != "") document.getElementById('name-float').style.zIndex = 1;
 	stop = function() {
 		document.getElementById("music").load();
@@ -18,6 +19,7 @@ function startGame() {
 		document.getElementById('name-float').style.zIndex = -1;
 		document.getElementById('name').focus();
 		r.stop();
+    mixpanel.track("Game End");
 	}
 	var game = new Game(canvas, true, true, 0, stop, updateScores);
 	r.start();
