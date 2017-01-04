@@ -11,7 +11,7 @@ Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
 
     // Game related variables
     var hspeed = 150;
-    var hacc = 1;
+    var hacc = 5;
     var vspeed = 0;
     var vacc_up = 10;
     var vacc_down = 10;
@@ -226,7 +226,7 @@ Game = function(canvas, single=true, host=true, id, onStopCb, updateScoresCb) {
             if(!obstacles[i].pass) {
                 obstacles[i].pass = true;
                 scores['self']++;
-                hspeed += hacc;
+                if(hspeed <= 200) hspeed += hacc;
             }
         }
     }
